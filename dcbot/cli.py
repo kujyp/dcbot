@@ -12,8 +12,8 @@ def main():
     subparsers = parser.add_subparsers()
 
     sp_post = subparsers.add_parser("post", help="post article")
-    sp_post.add_argument("--dc-account", type=str, required=True, help="dcinside 계정")
-    sp_post.add_argument("--dc-password", type=str, required=True, help="dcinside 계정 비밀번호")
+    sp_post.add_argument("--dc-nickname", type=str, required=True, help="dcinside 유동닉네임")
+    sp_post.add_argument("--dc-article-password", type=str, required=True, help="dcinside 작성글 비밀번호")
     sp_post.add_argument("--gall-id", type=str, required=True, help="dcinside gall id(e.g. 미국주식: stockus)")
     sp_post.add_argument("--title", type=str, required=True, help="글 제목")
     sp_post.add_argument("--content", type=str, required=True, help="글 내용")
