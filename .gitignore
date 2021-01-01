@@ -1,6 +1,7 @@
 sandbox
 venv*
 test-reports
+dcbot/driver
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Example user template template
