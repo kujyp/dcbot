@@ -1,7 +1,9 @@
 import os
 
 # Ref: https://www.selenium.dev/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html?highlight=implicitly#selenium.webdriver.remote.webdriver.WebDriver.implicitly_wait
-SELENIUM_TIME_TO_WAIT_SECONDS = 5
+SELENIUM_TIME_TO_WAIT_IN_SECONDS = 5
+
+DC_POSTING_DELAY_IN_SECONDS = 1
 
 # Ref: https://chromedriver.storage.googleapis.com/index.html
 CHROME_DRIVER_VERSION = "87.0.4280.88"
