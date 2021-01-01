@@ -116,10 +116,28 @@ class DcBrowser:
         element_loginbox = self.web_driver_container.find_element_by_class_name("login-box")
         return "로그인 해주세요." not in element_loginbox.text
 
+    def post_article(self, gall_id: str, title: str, content: str):
+        self.ensure_signin()
+
+        self.web_driver_container.get(f"https://gall.dcinside.com/mgallery/board/write/?id={gall_id}")
+        element_subject = self.web_driver_container.find_element_by_id("subject")
+        element_subject.send_keys(title)
+        element_canvas_iframe = self.web_driver_container.find_element_by_id("tx_canvas_wysiwyg")
+        self.web_driver_container.driver.switch_to.frame(element_canvas_iframe)
+        element_content_container = self.web_driver_container.find_element_by_class_name("tx-content-container")
+        element_content_container.send_keys(content)
+        self.web_driver_container.driver.switch_to.default_content()
+        element_write_btn = self.web_driver_container.driver.find_element_by_class_name("btn_svc")
+        element_write_btn.click()
+
 
 def post(dc_account: str, dc_password: str, gall_id: str, title: str, content: str):
     web_driver_container = WebDriverContainer()
+    post_with(web_driver_container, dc_account, dc_password, gall_id, title, content)
+
+
+def post_with(
+        web_driver_container: WebDriverContainer, dc_account: str, dc_password: str, gall_id: str, title: str, content: str
+):
     dc_browser = DcBrowser(web_driver_container, dc_account, dc_password)
-    dc_browser.ensure_signin()
-    import time
-    time.sleep(5)
+    dc_browser.post_article(gall_id, title, content)
