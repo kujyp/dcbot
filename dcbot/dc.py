@@ -6,6 +6,7 @@ from sys import platform
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
@@ -14,7 +15,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from dcbot.config import DCBOT_PACKAGE_DIRPATH, \
     CHROME_DRIVER_ZIPCONTENT_FILENAME, CHROME_DRIVER_INSTALL_DIRPATH, \
     CHROME_DRIVER_INSTALL_PATH, CHROME_DRIVER_URL_LINUX, CHROME_DRIVER_URL_MAC, CHROME_DRIVER_URL_WINDOWS, \
-    SELENIUM_TIME_TO_WAIT_IN_SECONDS, DC_POSTING_DELAY_IN_SECONDS
+    SELENIUM_TIME_TO_WAIT_IN_SECONDS, SELENIUM_USER_AGENT
 
 
 def ensure_driver_installed():
@@ -63,7 +64,9 @@ class WebDriverContainer:
     def __init__(self) -> None:
         ensure_driver_installed()
         print(f"Opening web browser...")
-        self.driver = WebDriver(CHROME_DRIVER_INSTALL_PATH)
+        options = Options()
+        options.add_argument(f"user-agent={SELENIUM_USER_AGENT}")
+        self.driver = WebDriver(CHROME_DRIVER_INSTALL_PATH, options=options)
         self.driver.implicitly_wait(SELENIUM_TIME_TO_WAIT_IN_SECONDS)
 
     def __enter__(self):
@@ -134,7 +137,6 @@ class DcBrowser:
         element_content_container.send_keys(content)
         self.web_driver_container.driver.switch_to.default_content()
         element_write_btn = self.web_driver_container.driver.find_element_by_class_name("btn_svc")
-        time.sleep(DC_POSTING_DELAY_IN_SECONDS)
         element_write_btn.click()
 
 
