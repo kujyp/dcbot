@@ -12,17 +12,21 @@ def main():
     parser.set_defaults(func=lambda: parser.print_usage())
     subparsers = parser.add_subparsers()
 
+    selenium_parser = argparse.ArgumentParser(add_help=False)
+    selenium_parser.add_argument("--headless", dest='headless', action='store_true', help="selenium headless mode로 실행")
+    selenium_parser.set_defaults(headless=False)
+
     dc_parser = argparse.ArgumentParser(add_help=False)
     dc_parser.add_argument("--dc-nickname", type=str, required=True, help="dcinside 유동닉네임")
     dc_parser.add_argument("--dc-article-password", type=str, required=True, help="dcinside 작성글 비밀번호")
     dc_parser.add_argument("--gall-id", type=str, required=True, help="dcinside gall id(e.g. 미국주식: stockus)")
 
-    sp_post = subparsers.add_parser("post", help="post article", parents=[dc_parser])
+    sp_post = subparsers.add_parser("post", help="post article", parents=[dc_parser, selenium_parser])
     sp_post.add_argument("--title", type=str, required=True, help="글 제목")
     sp_post.add_argument("--content", type=str, required=True, help="글 내용")
     sp_post.set_defaults(func=post)
 
-    sp_post = subparsers.add_parser("fear", help="fear greed crawling and post article", parents=[dc_parser])
+    sp_post = subparsers.add_parser("fear", help="fear greed crawling and post article", parents=[dc_parser, selenium_parser])
     sp_post.set_defaults(func=fear_greed)
 
     args = parser.parse_args()

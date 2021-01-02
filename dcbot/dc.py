@@ -15,7 +15,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from dcbot.config import DCBOT_PACKAGE_DIRPATH, \
     CHROME_DRIVER_ZIPCONTENT_FILENAME, CHROME_DRIVER_INSTALL_DIRPATH, \
     CHROME_DRIVER_INSTALL_PATH, CHROME_DRIVER_URL_LINUX, CHROME_DRIVER_URL_MAC, CHROME_DRIVER_URL_WINDOWS, \
-    SELENIUM_TIME_TO_WAIT_IN_SECONDS, SELENIUM_USER_AGENT
+    SELENIUM_TIME_TO_WAIT_IN_SECONDS, DC_ARTICLE_DELAY_IN_SECONDS
 
 
 def ensure_driver_installed():
@@ -61,11 +61,11 @@ def ensure_driver_installed():
 
 
 class WebDriverContainer:
-    def __init__(self) -> None:
+    def __init__(self, headless: bool = False) -> None:
         ensure_driver_installed()
         print(f"Opening web browser...")
         options = Options()
-        options.add_argument(f"user-agent={SELENIUM_USER_AGENT}")
+        options.headless = headless
         self.driver = WebDriver(CHROME_DRIVER_INSTALL_PATH, options=options)
         self.driver.implicitly_wait(SELENIUM_TIME_TO_WAIT_IN_SECONDS)
 
@@ -80,6 +80,11 @@ class WebDriverContainer:
         if print_log:
             print(f"Retrieve url [{url}]...")
         self.driver.get(url)
+
+    def find_element_by_tag_name(self, name: str):
+        WebDriverWait(self.driver, SELENIUM_TIME_TO_WAIT_IN_SECONDS) \
+            .until(expected_conditions.presence_of_element_located((By.TAG_NAME, name)))
+        return self.driver.find_element_by_tag_name(name)
 
     def find_element_by_id(self, id_: str):
         WebDriverWait(self.driver, SELENIUM_TIME_TO_WAIT_IN_SECONDS) \
@@ -125,23 +130,33 @@ class DcBrowser:
 
     def post_article(self, gall_id: str, title: str, content: str):
         self.web_driver_container.get(f"https://gall.dcinside.com/mgallery/board/write/?id={gall_id}")
+        time.sleep(DC_ARTICLE_DELAY_IN_SECONDS)
+
         element_name = self.web_driver_container.find_element_by_id("name")
         element_name.send_keys(self.dc_nickname)
         element_password = self.web_driver_container.find_element_by_id("password")
         element_password.send_keys(self.dc_article_password)
         element_subject = self.web_driver_container.find_element_by_id("subject")
         element_subject.send_keys(title)
+
+        element_chk_html = self.web_driver_container.driver.find_element_by_xpath("//a[@id='chk_html']")
+        element_chk_html.click()
+        time.sleep(DC_ARTICLE_DELAY_IN_SECONDS)
+        element_chk_html.click()
+        time.sleep(DC_ARTICLE_DELAY_IN_SECONDS)
+
         element_canvas_iframe = self.web_driver_container.find_element_by_id("tx_canvas_wysiwyg")
         self.web_driver_container.driver.switch_to.frame(element_canvas_iframe)
-        element_content_container = self.web_driver_container.find_element_by_class_name("tx-content-container")
+        element_content_container = self.web_driver_container.find_element_by_tag_name("body")
         element_content_container.send_keys(content)
         self.web_driver_container.driver.switch_to.default_content()
-        element_write_btn = self.web_driver_container.driver.find_element_by_class_name("btn_svc")
+        element_write_btn = self.web_driver_container.driver.find_element_by_xpath("//button[@type='image'][@class='btn_blue btn_svc write']")
+        time.sleep(DC_ARTICLE_DELAY_IN_SECONDS)
         element_write_btn.click()
 
 
-def post(dc_nickname: str, dc_article_password: str, gall_id: str, title: str, content: str):
-    with WebDriverContainer() as web_driver_container:
+def post(dc_nickname: str, dc_article_password: str, gall_id: str, title: str, content: str, headless: bool):
+    with WebDriverContainer(headless) as web_driver_container:
         post_with(web_driver_container, dc_nickname, dc_article_password, gall_id, title, content)
 
 
