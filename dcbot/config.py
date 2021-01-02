@@ -9,7 +9,7 @@ CHROME_DRIVER_FILENAME_LINUX = "chromedriver_linux64.zip"
 CHROME_DRIVER_FILENAME_MAC = "chromedriver_mac64.zip"
 CHROME_DRIVER_FILENAME_WINDOWS = "chromedriver_win32.zip"
 CHROME_DRIVER_ZIPCONTENT_FILENAME = "chromedriver"
-SELENIUM_USER_AGENT = "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
+SELENIUM_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
 
 CHROME_DRIVER_URL_ROOT = "https://chromedriver.storage.googleapis.com"
 CHROME_DRIVER_URL_LINUX = f"{CHROME_DRIVER_URL_ROOT}/{CHROME_DRIVER_VERSION}/{CHROME_DRIVER_FILENAME_LINUX}"
