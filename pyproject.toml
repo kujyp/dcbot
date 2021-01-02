@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "dcbot"
+version = "0.0.0-dev"
+description = "stock market crawler + dcinside article writer"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.scripts]
+dcbot = "dcbot.__main__:main"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+selenium = "^3.141.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
