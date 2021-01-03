@@ -45,8 +45,11 @@ class CrawledContent:
     def summary_child_content(self) -> str:
         raise NotImplementedError()
 
+    def stack_crawled_time(self) -> "CrawledContent":
+        self.set_crawled_time(datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=9))))
 
-class Crawler:
+
+class SeleniumCrawler:
     def __init__(self, web_driver_container: WebDriverContainer) -> None:
         self.web_driver_container = web_driver_container
 

@@ -1,7 +1,7 @@
 import datetime
 from typing import Tuple, Optional, Dict, Any
 
-from dcbot.crawler import Crawler, CrawledContent
+from dcbot.crawler import SeleniumCrawler, CrawledContent
 
 
 class FearGreedCrawledContent(CrawledContent):
@@ -37,14 +37,14 @@ class FearGreedCrawledContent(CrawledContent):
         return ret
 
 
-class FearGreedCrawler(Crawler):
+class FearGreedCrawler(SeleniumCrawler):
     def crawl(self) -> FearGreedCrawledContent:
         ret = FearGreedCrawledContent()
 
         url = "https://money.cnn.com/data/fear-and-greed/"
         self.web_driver_container.get(url)
         ret.append_reference(url)
-        ret.set_crawled_time(datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=9))))
+        ret.stack_crawled_time()
 
         needle_div = self.web_driver_container.find_element_by_id("needleChart")
         for each in needle_div.find_elements_by_xpath("ul/li"):
