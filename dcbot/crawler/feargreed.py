@@ -44,7 +44,7 @@ class FearGreedCrawler(Crawler):
         url = "https://money.cnn.com/data/fear-and-greed/"
         self.web_driver_container.get(url)
         ret.append_reference(url)
-        ret.set_crawled_time(datetime.datetime.now())
+        ret.set_crawled_time(datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=9))))
 
         needle_div = self.web_driver_container.find_element_by_id("needleChart")
         for each in needle_div.find_elements_by_xpath("ul/li"):
